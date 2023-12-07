@@ -1,6 +1,6 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { reactive, ref } from "vue";
+import { reactive } from "vue";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -16,21 +16,43 @@ export const useAppStore = defineStore('app', {
       'Привет! Я твой виртуальный ассистент. Чем я могу помочь?',
       'Хорошо, буду рад помочь',
       'Что ещё для вас сделать?'
-    ])
+    ]),
+
+    message: reactive ({
+      id: Date.now(),
+      text: "",
+    }),
+
+    messageBot: reactive({
+      id: Date.now(),
+      index: 0,
+      text: "",
+      options: [
+        {
+          id: 1,
+          text: "Поставить будильник"
+        },
+        {
+          id: 2,
+          text: "Посмореть прогноз погоды"
+        },
+        {
+          id: 3,
+          text: "Открыть google календарь"
+        },
+      ],
+      chatbot: true,
+    }),
+
+    messages: reactive([])
   }),
 
   actions: {
     sendMessage() {
       if(!this.comment.text) return
-
-      const message = ref({
-        id: Date.now(),
-        text: this.comment.text,
-      })
-
-      emit("sendMessage", message);
+      this.message.text = this.comment.text
+      this.messages.push(this.message)
       this.clearMessage()
-
       setTimeout(this.sendChatBotMessage, 1000)
     },
 
@@ -41,28 +63,9 @@ export const useAppStore = defineStore('app', {
     sendChatBotMessage() {
       if(this.comment.text) return
 
-      const message = ref({
-        id: Date.now(),
-        index: this.messagesIndex.index,
-        text: this.chatBotMessages[this.messagesIndex.index],
-        options: [
-          {
-            id: 1,
-            text: "Поставить будильник"
-          },
-          {
-            id: 2,
-            text: "Посмореть прогноз погоды"
-          },
-          {
-            id: 3,
-            text: "Открыть google календарь"
-          },
-        ],
-        chatbot: true,
-      })
-
-      emit('sendMessage', message, "sendChatBotMessage")
+      this.messageBot.index = this.messagesIndex.index
+      this.messageBot.text = this.chatBotMessages[this.messageBot.index]
+      this.messages.push(this.messageBot)
 
       if(this.messagesIndex.index < this.chatBotMessages.length) {
         this.messagesIndex.index++;
