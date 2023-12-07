@@ -13,7 +13,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 
-const emit = defineEmits(["sendMessage"])
+const emit = defineEmits(["sendMessage", "sendChatBotMessage"])
 
 const comment = ref("");
 const chatBotMessages = ref ([
@@ -47,11 +47,26 @@ function sendChatBotMessage() {
 
   const message = ref({
     id: Date.now(),
+    index: messagesIndex.value,
     text: chatBotMessages.value[messagesIndex.value],
+    options: [
+      {
+        id: 1,
+        text: "Поставить будильник"
+      },
+      {
+        id: 2,
+        text: "Посмореть прогноз погоды"
+      },
+      {
+        id: 3,
+        text: "Открыть google календарь"
+      },
+    ],
     chatbot: true,
   })
 
-  emit('sendMessage', message)
+  emit('sendMessage', message, "sendChatBotMessage")
 
   if(messagesIndex.value < chatBotMessages.value.length) {
     messagesIndex.value++;

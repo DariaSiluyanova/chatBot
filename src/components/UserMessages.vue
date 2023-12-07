@@ -1,9 +1,9 @@
 <template>
-    <v-card class="bg-white user-text mb-4 px-2" flat>{{ props.message.text }}</v-card>
+  <v-card class="bg-white user-text mb-4 px-2" flat>{{ props.message.text }}</v-card>
 </template>
 
 <script setup>
-const props = defineProps({message: Object})
+const props = defineProps({message: Object })
 </script>
 
 <style scoped>

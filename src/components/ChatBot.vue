@@ -10,8 +10,8 @@
         title="Let`s chat"
         prepend-icon="mdi-robot-excited-outline"
       >
-        <chat-list :messages="messages"/>
-        <user-input @send-message="pushMessage"/>
+        <chat-list :messages="messages" @choose-option="passAnswer"/>
+        <user-input @send-message="pushMessage" @send-chat-bot-message="answerChatBot"/>
         <v-btn
           text="Close Chat"
           @click="isActive.value = false">
@@ -28,6 +28,14 @@ import UserInput from "./UserInput.vue"
 let messages = ref([])
 
 function pushMessage(message) {
+  messages.value.push(message.value)
+}
+
+function passAnswer(payload) {
+  messages.value.push(payload)
+}
+
+function answerChatBot(message) {
   messages.value.push(message.value)
 }
 </script>
