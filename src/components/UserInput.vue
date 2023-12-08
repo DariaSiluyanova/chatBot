@@ -1,64 +1,25 @@
 <template>
   <v-text-field
-    v-model="comment"
+    v-model="store.comment.text"
     append-icon="mdi-send"
     variant="filled"
     clear-icon="mdi-close-circle"
     clearable
     type="text"
-    @click:append="sendMessage"
-    @click:clear="clearMessage">
+    @click:append="store.sendMessage"
+    @click:clear="store.clearMessage">
   </v-text-field>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useAppStore } from '../store/app.js'
 
-const emit = defineEmits(["sendMessage"])
-
-const comment = ref("");
-const chatBotMessages = ref ([
-  'Привет! Я твой виртуальный ассистент. Чем я могу помочь?',
-  'Хорошо, буду рад помочь',
-  'Что ещё для вас сделать?'
-])
-
-let messagesIndex = ref(0)
-
-onMounted(sendChatBotMessage)
-
-function sendMessage() {
-  if(!comment.value) return
-
-  const message = ref({
-    id: Date.now(),
-    text: comment.value,
-  })
-  emit("sendMessage", message);
-  clearMessage()
-  setTimeout(sendChatBotMessage, 1000)
-}
-
-function clearMessage() {
-  comment.value = ""
-}
-
-function sendChatBotMessage() {
-  if(comment.value) return
-
-  const message = ref({
-    id: Date.now(),
-    text: chatBotMessages.value[messagesIndex.value],
-    chatbot: true,
-  })
-
-  emit('sendMessage', message)
-
-  if(messagesIndex.value < chatBotMessages.value.length) {
-    messagesIndex.value++;
-  }
-
-  if(messagesIndex.value === 2) {
-    setTimeout(sendChatBotMessage, 1000)
-  }
-}
+const store = useAppStore()
+onMounted(store.sendChatBotMessage)
 </script>
+<style>
+::deep(.v-input__control .v-field__clearable) {
+  font-size: 28px;
+  max-width: 50px!important;
+}
+</style>

@@ -10,8 +10,8 @@
         title="Let`s chat"
         prepend-icon="mdi-robot-excited-outline"
       >
-        <chat-list :messages="messages"/>
-        <user-input @send-message="pushMessage"/>
+        <chat-list/>
+        <user-input/>
         <v-btn
           text="Close Chat"
           @click="isActive.value = false">
@@ -22,14 +22,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import ChatList from "./ChatList.vue"
 import UserInput from "./UserInput.vue"
-let messages = ref([])
 
-function pushMessage(message) {
-  messages.value.push(message.value)
-}
 </script>
 
 <style>
