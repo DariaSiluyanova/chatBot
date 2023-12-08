@@ -1,6 +1,6 @@
 // Utilities
 import { defineStore } from 'pinia'
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 
 export const useAppStore = defineStore('app', {
   state: () => ({
@@ -30,28 +30,7 @@ export const useAppStore = defineStore('app', {
       option: true,
     }),
 
-    messageBot: reactive({
-      id: Date.now(),
-      index: 0,
-      text: "",
-      options: [
-        {
-          id: 1,
-          text: "Поставить будильник"
-        },
-        {
-          id: 2,
-          text: "Посмореть прогноз погоды"
-        },
-        {
-          id: 3,
-          text: "Открыть google календарь"
-        },
-      ],
-      chatbot: true,
-    }),
-
-    messages: []
+    messages: reactive([])
   }),
 
   actions: {
@@ -78,9 +57,30 @@ export const useAppStore = defineStore('app', {
     sendChatBotMessage() {
       if(this.comment.text) return
 
-      this.messageBot.index = this.messagesIndex.index
-      this.messageBot.text = this.chatBotMessages[this.messageBot.index]
-      this.messages.push(this.messageBot)
+      const messageBot = ref({
+        id: Date.now(),
+        chatbot: true,
+        index: this.messagesIndex.index,
+        text: this.chatBotMessages[this.messagesIndex.index],
+        options: [
+          {
+            id: 1,
+            text: "Поставить будильник"
+          },
+          {
+            id: 2,
+            text: "Посмореть прогноз погоды"
+          },
+          {
+            id: 3,
+            text: "Открыть google календарь"
+          },
+        ],
+      });
+
+      this.messages.push(messageBot.value)
+
+      console.log(this.messages)
 
       if(this.messagesIndex.index < this.chatBotMessages.length) {
         this.messagesIndex.index++;
