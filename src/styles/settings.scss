@@ -8,3 +8,19 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+
+@media (min-width: 780px) {
+    .v-dialog > .v-overlay__content {
+        position: absolute;
+        top: 0;
+        left: 100px;
+    }
+
+    .v-overlay__scrim {
+        display: none;
+    }
+}
+
+.mdi:before {
+    font-size: 27px;
+}
