@@ -9,6 +9,11 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: process.env.ASSETS_BASE,
+  build: {
+    outDir: process.env.OUT_DIR || "./docs",
+  },
+
   plugins: [
     vue({
       template: { transformAssetUrls }
