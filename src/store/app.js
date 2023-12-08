@@ -21,6 +21,13 @@ export const useAppStore = defineStore('app', {
     message: reactive ({
       id: Date.now(),
       text: "",
+      option: false,
+    }),
+
+    messageOption: reactive({
+      id: Date.now(),
+      text: "",
+      option: true,
     }),
 
     messageBot: reactive({
@@ -44,7 +51,7 @@ export const useAppStore = defineStore('app', {
       chatbot: true,
     }),
 
-    messages: reactive([])
+    messages: []
   }),
 
   actions: {
@@ -53,6 +60,14 @@ export const useAppStore = defineStore('app', {
       this.message.text = this.comment.text
       this.messages.push(this.message)
       this.clearMessage()
+      setTimeout(this.sendChatBotMessage, 1000)
+
+      console.log(this.messages)
+    },
+
+    sendUserOption(e) {
+      this.messageOption.text = e.target.textContent
+      this.messages.push(this.messageOption)
       setTimeout(this.sendChatBotMessage, 1000)
     },
 

@@ -1,25 +1,24 @@
 <template>
   <v-card class="bg-purple-lighten-4 pa-2 mb-4 dialog">
-    <template v-for="message in props.messages">
+    <template v-for="message in store.messages">
+
       <div v-if="message.chatbot" :key="message.id">
-        <bot-messages  class="dialog-style" :message="message"></bot-messages>
-        <v-btn v-if="message.index === 0" class="btn-choice mx-1 mb-2" @click="chooseOption" v-for="option in message.options" :key="option.id">{{ option.text }}</v-btn>
+        <v-card class="bg-white bot-text mb-4 px-2" flat>{{ message.text }}</v-card>
+        <v-btn v-if="message.index === 0" class="btn-choice mx-1 mb-2" @click="store.sendUserOption" v-for="option in message.options" :key="option.id">{{ option.text }}</v-btn>
       </div>
-      <user-messages v-else class="dialog-style" :key="message.id" :message="message"/>
+
+      <div v-else class="user-text" :key="message.id">
+        <v-card v-if="message.option" class="bg-white user-text mb-4 px-2" flat>{{ message.text }}</v-card>
+        <v-card v-else class="bg-white mb-4 px-2" flat>{{ message.text }}</v-card>
+      </div>
+
     </template>
   </v-card>
 </template>
 
 <script setup>
-import UserMessages from './UserMessages.vue';
-import BotMessages from './BotMessages.vue';
-const emit = defineEmits(['chooseOption']);
-const props = defineProps(['messages']);
-
-const chooseOption = (e) => {
-  let payload = e.target.textContent
-  emit("chooseOption", {text: payload})
-};
+import { useAppStore } from '@/store/app';
+const store = useAppStore();
 
 </script>
 
@@ -36,5 +35,19 @@ const chooseOption = (e) => {
   font-size: 12px;
   background: #4A148C;
   color: #fff;
+}
+
+.bot-text {
+  width: fit-content;
+  display: flex;
+  flex-wrap: wrap;
+  align-self: flex-start;
+  border-radius: 10px;
+}
+
+.user-text {
+  width: fit-content;
+  align-self: flex-end;
+  border-radius: 10px;
 }
 </style>
