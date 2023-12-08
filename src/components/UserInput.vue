@@ -17,3 +17,9 @@ import { useAppStore } from '../store/app.js'
 const store = useAppStore()
 onMounted(store.sendChatBotMessage)
 </script>
+<style>
+::deep(.v-input__control .v-field__clearable) {
+  font-size: 28px;
+  max-width: 50px!important;
+}
+</style>

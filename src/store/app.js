@@ -18,42 +18,61 @@ export const useAppStore = defineStore('app', {
       'Что ещё для вас сделать?'
     ]),
 
-    message: reactive ({
-      id: Date.now(),
-      text: "",
-      option: false,
-    }),
-
-    messageOption: reactive({
-      id: Date.now(),
-      text: "",
-      option: true,
-    }),
-
     messages: reactive([])
   }),
 
   actions: {
+    /**
+     * Функция, создающее сообщение, которое введено пользователем через input
+     * @returns
+     */
     sendMessage() {
       if(!this.comment.text) return
-      this.message.text = this.comment.text
-      this.messages.push(this.message)
+      const message = ref({
+        id: Date.now(),
+        text: this.comment.text,
+        option: false,
+      })
+
+      this.messages.push(message.value)
       this.clearMessage()
-      setTimeout(this.sendChatBotMessage, 1000)
 
-      console.log(this.messages)
+      if(this.messagesIndex.index === 3) {
+        this.messagesIndex.index = 1
+      }
+      setTimeout(this.sendChatBotMessage, 1000)
     },
 
+    /**
+     * Функция, отправляющая сообщение от имени пользователя при выборе опций, предложенных чат-ботом
+     * @returns
+     */
     sendUserOption(e) {
-      this.messageOption.text = e.target.textContent
-      this.messages.push(this.messageOption)
+      if(this.messagesIndex.index === 3) {
+        this.messagesIndex.index = 1
+      }
+      const messageOption = ref({
+        id: Date.now(),
+        text: e.target.textContent,
+        option: true,
+      });
+
+      this.messages.push(messageOption.value)
       setTimeout(this.sendChatBotMessage, 1000)
     },
 
+    /**
+     * Функция очищения поля ввода
+     * @returns
+     */
     clearMessage() {
       this.comment.text = ""
     },
 
+    /**
+     * Функция отправления сообщений от лица бота
+     * @returns
+     */
     sendChatBotMessage() {
       if(this.comment.text) return
 
@@ -79,8 +98,6 @@ export const useAppStore = defineStore('app', {
       });
 
       this.messages.push(messageBot.value)
-
-      console.log(this.messages)
 
       if(this.messagesIndex.index < this.chatBotMessages.length) {
         this.messagesIndex.index++;
