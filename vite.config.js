@@ -9,7 +9,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.ASSETS_BASE,
+  base: './',
   build: {
     outDir: process.env.OUT_DIR || "./docs",
   },
